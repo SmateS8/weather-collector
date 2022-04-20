@@ -1,2 +1,4 @@
 .~lock.data.csv#
 #sometimes made by Libre Office while editing the file
+.vscode
+#created by VS code for personal use
