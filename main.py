@@ -23,10 +23,10 @@ print("Api URL will be : " + url)
 # Gets date and time and formats it
 now = datetime.datetime.now()
 date = now.strftime("%d.%m")
-time = now.strftime("%H")
-print("Date and time is : " + date + " " + time + " hours")
-# FOR TESTING, TIME IS PERMANENTLY SET BY LINE BELOW!
-
+hour = now.strftime("%H")
+minute = now.strftime("%M")
+time = now.strftime("%H:%M")
+print("Date and time is : " + date + " " + hour + ":" + minute)
 
 
 def K_to_C(K):
@@ -55,7 +55,7 @@ while True:
             cached_file.append(line)
 
     # Checks if it is right time and gets data from API.
-    if int(time) == 7 or int(time) == 14 or int(time) == 20:
+    if int(hour) == 7 or int(hour) == 14 or int(hour) == 20:
         resp = get(url)
         api_data = resp.json()
         print(api_data)
@@ -66,7 +66,7 @@ while True:
             print("Check the error code " + str(resp))
 
         # Checks which right time is it and writes data
-        if int(time) == 7:
+        if int(hour) == 7:
             # writes the Temp_7
             cached_file[edit_line - 1][1] = K_to_C(float(api_data["main"]["temp"]))
             # writes Wind_7
@@ -76,7 +76,7 @@ while True:
             # writes Humidity_7
             cached_file[edit_line - 1][12] = api_data['main']["humidity"]
             changed = True
-        elif int(time) == 14:
+        elif int(hour) == 14:
             # writes the Temp_14
             cached_file[edit_line - 1][2] = K_to_C(float(api_data["main"]["temp"]))
             # writes Wind_14
@@ -86,7 +86,7 @@ while True:
             # writes Humidity_14
             cached_file[edit_line - 1][13] = api_data['main']["humidity"]
             changed = True
-        elif int(time) == 20:
+        elif int(hour) == 20:
             # writes the Temp_20
             cached_file[edit_line - 1][3] = K_to_C(float(api_data['main']['temp']))
             # writes Wind_20
@@ -111,7 +111,8 @@ while True:
             print("Data was written!")
     else:
         print("Nothing was changed.")
-    #waits for half an hour
-    print("Waiting for half an hour, then it will check again.")
+    #adds 30 minutes to the current time
+    nextcheck = now + datetime.timedelta(minutes=30)
+    nextcheck = nextcheck.strftime("%H:%M")
+    print("Wainting for half an hour...the it will be cheked again("+ str(nextcheck) + ")")
     sleep(1800)
-
